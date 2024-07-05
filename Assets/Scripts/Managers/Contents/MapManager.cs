@@ -22,6 +22,8 @@ public class MapManager
         int x = cellPos.x - MinX;
         int y = MaxY - cellPos.y;
 
+        if( x >= MaxX - MinX || y >= MaxY - MinY) { return false; }
+
         return !_collision[y,x];
     }
 
