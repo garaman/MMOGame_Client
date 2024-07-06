@@ -177,7 +177,7 @@ public class PlayerController : CreatureController
 
     IEnumerator CoStartShootArrow()
     {
-        GameObject go = Managers.Resource.Instantiate("Creature/Arrow");
+        GameObject go = Managers.Resource.Instantiate("Skill/Arrow");
         ArrowController ac = go.GetComponent<ArrowController>();
         ac.Dir = _lastDir;
         ac.CellPos = CellPos;
