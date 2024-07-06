@@ -10,12 +10,14 @@ public class Managers : MonoBehaviour
 	#region Contents
     MapManager _map = new MapManager();
     ObjectManager _object = new ObjectManager();
+    NetworkManager _network = new NetworkManager();
     public static MapManager Map { get { return Instance._map; } }
     public static ObjectManager Object { get { return Instance._object; } }
-	#endregion
+    public static NetworkManager Network { get { return Instance._network; } }
+    #endregion
 
-	#region Core
-	DataManager _data = new DataManager();
+    #region Core
+    DataManager _data = new DataManager();
     PoolManager _pool = new PoolManager();
     ResourceManager _resource = new ResourceManager();
     SceneManagerEx _scene = new SceneManagerEx();
@@ -37,7 +39,7 @@ public class Managers : MonoBehaviour
 
     void Update()
     {
-
+        _network.Init();
     }
 
     static void Init()

@@ -78,7 +78,7 @@ public class MonsterController : CreatureController
             destPos = _target.GetComponent<PlayerController>().CellPos;
             
             Vector3Int dir = destPos - CellPos;
-            if (dir.magnitude <= _skillRange && (dir.x == 0 || dir.y == 0));
+            if (dir.magnitude <= _skillRange && (dir.x == 0 || dir.y == 0))
             {
                 Dir = GetDirFromVec(dir);
                 State = CreatureState.Skill;
