@@ -1,3 +1,4 @@
+using Google.Protobuf.Protocol;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -18,10 +19,10 @@ public class MonsterController : CreatureController
 
     public override CreatureState State
     {
-        get { return _state; }
+        get { return PosInfo.State; }
         set
         {
-            if (_state == value) { return; }
+            if (PosInfo.State == value) { return; }
             base.State = value;
 
             if (_coPatrol != null)
@@ -126,7 +127,7 @@ public class MonsterController : CreatureController
         effect.GetComponent<Animator>().Play("DeathEffect");
         GameObject.Destroy(effect, 0.25f);
 
-        Managers.Object.Remove(gameObject);
+        Managers.Object.Remove(Id);
         Managers.Resource.Destroy(gameObject);
     }
 

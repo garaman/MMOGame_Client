@@ -1,3 +1,4 @@
+using Google.Protobuf.Protocol;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,8 +7,8 @@ using static Define;
 
 public class PlayerController : CreatureController
 {
-    Coroutine _coSkill;
-    bool _rangeSkill = false;
+    protected Coroutine _coSkill;
+    protected bool _rangeSkill = false;
 
     protected override void Init()
     {
@@ -15,7 +16,7 @@ public class PlayerController : CreatureController
     }
     protected override void UpdateAnimation()
     {
-        if (_state == CreatureState.Idle)
+        if (State == CreatureState.Idle)
         {
             switch (_lastDir)
             {
@@ -37,9 +38,9 @@ public class PlayerController : CreatureController
                     break;
             }
         }
-        else if (_state == CreatureState.Moving)
+        else if (State == CreatureState.Moving)
         {
-            switch (_dir)
+            switch (Dir)
             {
                 case MoveDir.Up:
                     _animator.Play("Walk_Back");
@@ -62,7 +63,7 @@ public class PlayerController : CreatureController
                     break;
             }
         }
-        else if (_state == CreatureState.Skill)
+        else if (State == CreatureState.Skill)
         {
             switch (_lastDir)
             {
@@ -84,7 +85,7 @@ public class PlayerController : CreatureController
                     break;
             }
         }
-        else if (_state == CreatureState.Dead)
+        else if (State == CreatureState.Dead)
         {
 
         }
@@ -96,24 +97,10 @@ public class PlayerController : CreatureController
 
     protected override void UpdateController()
     {
-        switch (State)
-        {
-            case CreatureState.Idle:
-                GetDirInput();
-                break;
-            case CreatureState.Moving:
-                GetDirInput();
-                break;
-        }
-
         base.UpdateController();
     }
 
-    private void LateUpdate()
-    {
-        Camera.main.transform.position = new Vector3(transform.position.x, transform.position.y, -10);
-
-    }
+    
 
     protected override void UpdateIdle()
     {
@@ -121,37 +108,7 @@ public class PlayerController : CreatureController
         {
             State = CreatureState.Moving;
             return;
-        }
-
-        if (Input.GetKey(KeyCode.A))
-        {
-            State = CreatureState.Skill;
-            _coSkill = StartCoroutine("CoStartShootArrow");
-        }
-    }
-
-    void GetDirInput()
-    {
-        if (Input.GetKey(KeyCode.UpArrow))
-        {
-            Dir = MoveDir.Up;
-        }
-        else if (Input.GetKey(KeyCode.DownArrow))
-        {
-            Dir = MoveDir.Down;
-        }
-        else if (Input.GetKey(KeyCode.LeftArrow))
-        {
-            Dir = MoveDir.Left;
-        }
-        else if (Input.GetKey(KeyCode.RightArrow))
-        {
-            Dir = MoveDir.Right;
-        }
-        else
-        {
-            Dir = MoveDir.None;
-        }
+        }        
     }
 
 

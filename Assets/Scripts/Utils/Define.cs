@@ -4,23 +4,6 @@ using UnityEngine;
 
 public class Define
 {
-    public enum CreatureState
-    {
-        Idle,
-        Moving,
-        Skill,
-        Dead,
-    }
-
-    public enum MoveDir
-    { 
-        Up,
-        Down,
-        Left,
-        Right,
-        None,
-    }
-
     public enum Scene
     {
         Unknown,
