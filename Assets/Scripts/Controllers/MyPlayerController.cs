@@ -6,6 +6,7 @@ using static Define;
 
 public class MyPlayerController : PlayerController
 {
+    bool _moveKeyPressed = false;
     protected override void Init()
     {
         base.Init();
@@ -34,21 +35,33 @@ public class MyPlayerController : PlayerController
 
     protected override void UpdateIdle()
     {
-        if (Dir != MoveDir.None)
+        if (_moveKeyPressed)
         {
             State = CreatureState.Moving;
             return;
         }
 
-        if (Input.GetKey(KeyCode.A))
+        if (Input.GetKey(KeyCode.A) && _coSkillCoolTime == null)
         {
-            State = CreatureState.Skill;
-            _coSkill = StartCoroutine("CoStartShootArrow");
+            C_Skill skill = new C_Skill() { Info = new SkillInfo() };
+            skill.Info.SkillId = 2;
+            Managers.Network.Send(skill);
+
+            _coSkillCoolTime = StartCoroutine("CoInputCoolTime", 0.2f);
         }
+    }
+
+    Coroutine _coSkillCoolTime;
+    IEnumerator CoInputCoolTime(float time)
+    {
+        yield return new WaitForSeconds(time);
+        _coSkillCoolTime = null;
     }
 
     void GetDirInput()
     {
+        _moveKeyPressed = true;
+
         if (Input.GetKey(KeyCode.UpArrow))
         {
             Dir = MoveDir.Up;
@@ -67,13 +80,13 @@ public class MyPlayerController : PlayerController
         }
         else
         {
-            Dir = MoveDir.None;
+            _moveKeyPressed = false;
         }
     }
 
     protected override void MoveToNextPos()
     {
-        if (Dir == MoveDir.None)
+        if (_moveKeyPressed == false)
         {
             State = CreatureState.Idle;
             CheckUpdatedFlag();
@@ -109,7 +122,7 @@ public class MyPlayerController : PlayerController
         CheckUpdatedFlag();
     }
 
-    void CheckUpdatedFlag()
+    protected override void CheckUpdatedFlag()
     {
         if (_updated)
         {
@@ -117,39 +130,5 @@ public class MyPlayerController : PlayerController
             movePacket.PosInfo = PosInfo;
             Managers.Network.Send(movePacket);
         }
-    }
-
-    IEnumerator CoStartPunch()
-    {
-        // 피격 판정
-        GameObject go = Managers.Object.Find(GetFrontCellPos());
-        if (go != null)
-        {
-            CreatureController cc = go.GetComponent<CreatureController>();
-            if (cc != null)
-            {
-                cc.OnDamaged();
-            }
-        }
-
-        // 대기 시간
-        _rangeSkill = false;
-        yield return new WaitForSeconds(0.5f);
-        State = CreatureState.Idle;
-        _coSkill = null;
-    }
-
-    IEnumerator CoStartShootArrow()
-    {
-        GameObject go = Managers.Resource.Instantiate("Skill/Arrow");
-        ArrowController ac = go.GetComponent<ArrowController>();
-        ac.Dir = _lastDir;
-        ac.CellPos = CellPos;
-
-        // 대기 시간
-        _rangeSkill = true;
-        yield return new WaitForSeconds(0.3f);
-        State = CreatureState.Idle;
-        _coSkill = null;
     }
 }

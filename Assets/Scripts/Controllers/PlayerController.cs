@@ -16,9 +16,11 @@ public class PlayerController : CreatureController
     }
     protected override void UpdateAnimation()
     {
+        if(_animator== null || _spriteRenderer == null) {  return; }    
+
         if (State == CreatureState.Idle)
         {
-            switch (_lastDir)
+            switch (Dir)
             {
                 case MoveDir.Up:
                     _animator.Play("Idle_Back");
@@ -58,14 +60,11 @@ public class PlayerController : CreatureController
                     _animator.Play("Walk_Side");
                     _spriteRenderer.flipX = false;
                     break;
-                case MoveDir.None:
-
-                    break;
             }
         }
         else if (State == CreatureState.Skill)
         {
-            switch (_lastDir)
+            switch (Dir)
             {
                 case MoveDir.Up:
                     _animator.Play( _rangeSkill ? "Attack_Weapon_Back" : "Attack_Back" );
@@ -100,43 +99,35 @@ public class PlayerController : CreatureController
         base.UpdateController();
     }
 
-    
 
-    protected override void UpdateIdle()
+    public void UseSkill(int skillId)
     {
-        if (Dir != MoveDir.None)
+        if (skillId == 1)
         {
-            State = CreatureState.Moving;
-            return;
-        }        
+            _coSkill = StartCoroutine("CoStartPunch");
+        }
     }
 
+    protected virtual void CheckUpdatedFlag()
+    {
+        
+    }
 
     IEnumerator CoStartPunch()
-    {
-        // 피격 판정
-        GameObject go = Managers.Object.Find(GetFrontCellPos());
-        if( go != null )
-        {
-            CreatureController cc = go.GetComponent<CreatureController>();
-            if (cc != null)
-            {
-                cc.OnDamaged();
-            }
-        }
-
-        // 대기 시간
+    {        // 대기 시간
         _rangeSkill = false;
+        State = CreatureState.Skill;
         yield return new WaitForSeconds(0.5f);
         State = CreatureState.Idle;
         _coSkill = null;
+        CheckUpdatedFlag();
     }
 
     IEnumerator CoStartShootArrow()
     {
         GameObject go = Managers.Resource.Instantiate("Skill/Arrow");
         ArrowController ac = go.GetComponent<ArrowController>();
-        ac.Dir = _lastDir;
+        ac.Dir = Dir;
         ac.CellPos = CellPos;
 
         // 대기 시간
@@ -145,4 +136,6 @@ public class PlayerController : CreatureController
         State = CreatureState.Idle;
         _coSkill = null;
     }
+
+    
 }

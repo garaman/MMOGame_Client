@@ -16,21 +16,27 @@ public class MapEditor
     [MenuItem("Tools/GenerateMap %#g")]
     private static void GenerateMap()
     {
+        GenerateByPath("Assets/Resources/Map");
+        GenerateByPath("../Common/MapData");
+    }
+
+    private static void GenerateByPath(string pathPrefix)
+    {
         GameObject[] Maps = Resources.LoadAll<GameObject>("Prefabs/Map");
 
         foreach (GameObject map in Maps)
         {
             Tilemap tmbase = Util.FindChild<Tilemap>(map, "Tilemap_Base", true);
-            Tilemap tm = Util.FindChild<Tilemap>(map, "Tilemap_Collision", true);            
+            Tilemap tm = Util.FindChild<Tilemap>(map, "Tilemap_Collision", true);
 
-            using (var writer = File.CreateText($"Assets/Resources/Map/{map.name}.txt"))
+            using (var writer = File.CreateText($"{pathPrefix}/{map.name}.txt"))
             {
                 writer.WriteLine(tmbase.cellBounds.xMin);
                 writer.WriteLine(tmbase.cellBounds.xMax);
                 writer.WriteLine(tmbase.cellBounds.yMin);
                 writer.WriteLine(tmbase.cellBounds.yMax);
 
-                for (int y = tmbase.cellBounds.yMax-1; y >= tmbase.cellBounds.yMin; y--)
+                for (int y = tmbase.cellBounds.yMax - 1; y >= tmbase.cellBounds.yMin; y--)
                 {
                     for (int x = tmbase.cellBounds.xMin; x < tmbase.cellBounds.xMax; x++)
                     {
@@ -49,7 +55,6 @@ public class MapEditor
             }
         }
     }
-
 
 #endif
  }

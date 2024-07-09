@@ -12,6 +12,8 @@ enum MsgId
   S_DESPAWN = 3;
   C_MOVE = 4;
   S_MOVE = 5;
+  C_SKILL = 6;
+  S_SKILL = 7;
 }
 
 enum CreatureState
@@ -27,13 +29,21 @@ enum MoveDir
     Up= 0;
 	Down= 1;
     Left= 2;
-    Right= 3;
-    None= 4;
+    Right= 3;    
 }
+
+enum GameObjectType
+{
+	NONE = 0;
+	PLAYER = 1;
+	MONSTER = 2;
+	PROJECTILE = 3;
+}
+
 
 message S_EnterGame 
 {
-  PlayerInfo player = 1;
+  ObjectInfo player = 1;
 }
 
 message S_LeaveGame
@@ -43,12 +53,12 @@ message S_LeaveGame
 
 message S_Spawn
 {
-	repeated PlayerInfo players = 1;
+	repeated ObjectInfo objects = 1;
 }
 
 message S_Despawn
 {
-	repeated int32 playerIds = 1;
+	repeated int32 objectId = 1;
 }
 
 message C_Move
@@ -58,13 +68,24 @@ message C_Move
 
 message S_Move
 {
-	int32 playerId = 1;
+	int32 objectId = 1;
 	PositionInfo posInfo = 2;
 }
 
-message PlayerInfo
+message C_Skill
+{
+	SkillInfo info = 1;
+}
+
+message S_Skill
 {
 	int32 playerId = 1;
+	SkillInfo info = 2;
+}
+
+message ObjectInfo
+{
+	int32 objectId = 1;
 	string name = 2;
 	PositionInfo posInfo = 3;
 }
@@ -75,4 +96,9 @@ message PositionInfo
 	MoveDir moveDir = 2;
 	int32 posX = 3;
 	int32 posY = 4;
+}
+
+message SkillInfo
+{
+	int32 skillId = 1;
 }
