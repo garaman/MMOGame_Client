@@ -12,7 +12,7 @@ public class PlayerController : CreatureController
 
     protected override void Init()
     {
-        base.Init();
+        base.Init();        
     }
     protected override void UpdateAnimation()
     {
@@ -100,7 +100,7 @@ public class PlayerController : CreatureController
     }
 
 
-    public void UseSkill(int skillId)
+    public override void UseSkill(int skillId)
     {
         if (skillId == 1)
         {
@@ -118,10 +118,11 @@ public class PlayerController : CreatureController
     }
 
     IEnumerator CoStartPunch()
-    {        // 대기 시간
+    {   
+        // 대기 시간
         _rangeSkill = false;
         State = CreatureState.Skill;
-        yield return new WaitForSeconds(0.3f);
+        yield return new WaitForSeconds(0.5f);
         State = CreatureState.Idle;
         _coSkill = null;
         CheckUpdatedFlag();

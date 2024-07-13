@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using static Define;
 
-public class ArrowController : CreatureController
+public class ArrowController : BaseController
 {
     protected override void Init()
     {
@@ -24,7 +24,7 @@ public class ArrowController : CreatureController
                 break;
         }
         State = CreatureState.Moving;
-        _speed = 15.0f;
+        
         base.Init();
     }
 

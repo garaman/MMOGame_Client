@@ -4,265 +4,73 @@ using System.Collections.Generic;
 using UnityEngine;
 using static Define;
 
-public class CreatureController : MonoBehaviour
+public class CreatureController : BaseController
 {
-    public int Id {  get; set; }
-
-    [SerializeField]    
-    protected float _speed = 5.0f;
-
-    protected bool _updated = false;
-
-    PositionInfo _positionInfo = new PositionInfo();
-    public PositionInfo PosInfo
-    { 
-        get { return _positionInfo; }
+    HpBar _hpbar;
+   
+    public override StatInfo Stat
+    {
+        get { return base.Stat; }
         set
         {
-            if(_positionInfo.Equals(value)) { return; }
-            CellPos = new Vector3Int(value.PosX, value.PosY,0);
-            State = value.State;
-            Dir = value.MoveDir;
+            base.Stat = value;            
+            UpdateHpBar();
         }
     }
-
-    public void SyncPos()
+    public override int Hp
     {
-        Vector3 desPos = Managers.Map.CurrentGrid.CellToWorld(CellPos) + new Vector3(0.5f, 0f);
-        transform.position = desPos;
-    }
-
-    public Vector3Int CellPos 
-    {
-        get 
-        {
-            return new Vector3Int(PosInfo.PosX, PosInfo.PosY, 0);
-        }
-        set
-        {
-            if (PosInfo.PosX == value.x && PosInfo.PosY == value.y) { return; }
-            PosInfo.PosX = value.x;
-            PosInfo.PosY = value.y;
-            _updated = true;
-        }
-    }    
-    protected Animator _animator;
-    protected SpriteRenderer _spriteRenderer;
-        
-    public virtual CreatureState State
-    {
-        get { return PosInfo.State; }
+        get { return Stat.Hp; }
         set 
         {
-            if(PosInfo.State == value) { return; }
-            PosInfo.State = value;
-
-            UpdateAnimation();
-            _updated = true;
-        }        
-    }
-
-    public MoveDir Dir
-    {
-        get { return PosInfo.MoveDir; }
-        set
-        {
-            if (PosInfo.MoveDir == value) { return; }
-            PosInfo.MoveDir = value;   
-
-            UpdateAnimation();
-            _updated = true;
+            base.Hp = value;
+            UpdateHpBar();
         }
     }
-    public MoveDir GetDirFromVec(Vector3Int dir)
+   
+    protected void AddHPBar()
     {
-        if (dir.x > 0) { return MoveDir.Right; }
-        else if (dir.x < 0) { return MoveDir.Left; }
-        else if (dir.y > 0) { return MoveDir.Up; }
-        else { return MoveDir.Down; }        
+        GameObject go = Managers.Resource.Instantiate("UI/HpBar", transform);
+        go.transform.localPosition = new Vector3(0, 0.1f, 0);
+        go.name = "HpBar";
+        _hpbar = go.GetComponent<HpBar>();
+        UpdateHpBar();
     }
 
-    public Vector3Int GetFrontCellPos()
+    void UpdateHpBar()
     {
-        Vector3Int cellPos = CellPos;
+        if (_hpbar == null) { return; }
 
-        switch(Dir)
+        float ratio = 0.0f;
+        if (Stat.MaxHp > 0)
         {
-            case MoveDir.Up:
-                cellPos += Vector3Int.up;
-                break;
-            case MoveDir.Down:
-                cellPos += Vector3Int.down;
-                break;
-            case MoveDir.Left:
-                cellPos += Vector3Int.left;
-                break;
-            case MoveDir.Right:
-                cellPos += Vector3Int.right;
-                break;
+            ratio = ((float)Hp / Stat.MaxHp);            
         }
-        return cellPos;
+        _hpbar.SetHpBar(ratio);
     }
 
-    protected virtual void UpdateAnimation()
+    protected override void Init()
     {
-        if (State == CreatureState.Idle)
-        {
-            switch (Dir)
-            {
-                case MoveDir.Up:
-                    _animator.Play("Idle_Back");
-                    _spriteRenderer.flipX = false;
-                    break;
-                case MoveDir.Down:
-                    _animator.Play("Idle_Front");
-                    _spriteRenderer.flipX = false;
-                    break;
-                case MoveDir.Left:
-                    _animator.Play("Idle_Side");
-                    _spriteRenderer.flipX = true;
-                    break;
-                case MoveDir.Right:
-                    _animator.Play("Idle_Side");
-                    _spriteRenderer.flipX = false;
-                    break;
-            }
-        }
-        else if (State == CreatureState.Moving)
-        {
-            switch (Dir)
-            {
-                case MoveDir.Up:
-                    _animator.Play("Walk_Back");
-                    _spriteRenderer.flipX = false;
-                    break;
-                case MoveDir.Down:
-                    _animator.Play("Walk_Front");
-                    _spriteRenderer.flipX = false;
-                    break;
-                case MoveDir.Left:
-                    _animator.Play("Walk_Side");
-                    _spriteRenderer.flipX = true;
-                    break;
-                case MoveDir.Right:
-                    _animator.Play("Walk_Side");
-                    _spriteRenderer.flipX = false;
-                    break;
-                
-            }
-        }
-        else if (State == CreatureState.Skill)
-        {
-            switch (Dir)
-            {
-                case MoveDir.Up:
-                    _animator.Play("Attack_Back");
-                    _spriteRenderer.flipX = false;
-                    break;
-                case MoveDir.Down:
-                    _animator.Play("Attack_Front");
-                    _spriteRenderer.flipX = false;
-                    break;
-                case MoveDir.Left:
-                    _animator.Play("Attack_Side");
-                    _spriteRenderer.flipX = true;
-                    break;
-                case MoveDir.Right:
-                    _animator.Play("Attack_Side");
-                    _spriteRenderer.flipX = false;
-                    break;
-            }
-        }
-        else if (State == CreatureState.Dead)
-        {
-
-        }
-        else
-        {
-
-        }
+        base.Init();
+        AddHPBar();        
     }
-
-    void Start()
-    {
-       Init();
-    }
-
-    void Update()
-    {
-        UpdateController();
-    }
-
-    protected virtual void Init()
-    {
-        _animator = GetComponent<Animator>();
-        _spriteRenderer = GetComponent<SpriteRenderer>();
-        Vector3 pos = Managers.Map.CurrentGrid.CellToWorld(CellPos) + new Vector3(0.5f, 0f);
-        transform.position = pos;
-
-        State = CreatureState.Idle;
-        Dir = MoveDir.Down;
-        CellPos = new Vector3Int(0, 0, 0);
-        UpdateAnimation();
-    }
-
-    protected virtual void UpdateController()
-    {
-        switch(State)
-        {
-            case CreatureState.Idle:
-                UpdateIdle();
-                break;
-            case CreatureState.Moving:
-                UpdateMoving();
-                break;
-            case CreatureState.Skill:
-                break;
-            case CreatureState.Dead:
-                break;
-        }   
-    }
-
-    protected virtual void UpdateIdle()
-    {
-    }
-
-    protected virtual void UpdateMoving()
-    {
-        Vector3 desPos = Managers.Map.CurrentGrid.CellToWorld(CellPos) + new Vector3(0.5f, 0f);
-        Vector3 moveDir = desPos - transform.position;
-
-        // 도착 여부 체크
-        float dist = moveDir.magnitude;
-        if (dist < _speed * Time.deltaTime)
-        {
-            transform.position = desPos;
-            MoveToNextPos();
-        }
-        else
-        {
-            transform.position += moveDir.normalized * Time.deltaTime * _speed;
-            State = CreatureState.Moving;
-        }
-    }
-
-    protected virtual void MoveToNextPos()
-    { 
-        
-    }
-
-    protected virtual void UpdateSkill()
-    {
-
-    }
-
-    protected virtual void UpdateDead()
-    {
-
-    }
-
+ 
     public virtual void OnDamaged()
     {
 
+    }
+
+    public virtual void OnDead()
+    {
+        State = CreatureState.Dead;
+
+        GameObject effect = Managers.Resource.Instantiate("Effect/Effect");
+        effect.transform.position = transform.position;
+        effect.GetComponent<Animator>().Play("DeathEffect");
+        GameObject.Destroy(effect, 0.25f);
+    }
+
+    public virtual void UseSkill(int skillId)
+    {
+       
     }
 }
