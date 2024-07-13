@@ -30,8 +30,7 @@ namespace Data
 		}
 	}
 #endregion
-<<<<<<< Updated upstream
-=======
+
 
 #region Skill
     [Serializable]
@@ -68,5 +67,5 @@ namespace Data
         }
     }
  #endregion
->>>>>>> Stashed changes
+
 }
