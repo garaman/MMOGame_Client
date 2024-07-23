@@ -155,4 +155,15 @@ class PacketHandler
 
     }
 
+    public static void S_ItemListHandler(PacketSession session, IMessage packet)
+    {
+        S_ItemList itemListPacket = packet as S_ItemList;
+
+        foreach (ItemInfo item in itemListPacket.Items)
+        {
+            Debug.Log($"{item.TemplateId} : {item.Count}");
+        }
+
+    }
+
 }
