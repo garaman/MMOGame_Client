@@ -4,13 +4,15 @@
       "id": "1",
       "name": "견습생의 검",
       "weaponType": "Sword",
-      "damage": "10"
+      "damage": "10",
+      "iconPath": "Textures/Items/Iron Sword"
     },
     {
       "id": "2",
       "name": "견습생의 활",
       "weaponType": "Bow",
-      "damage": "5"
+      "damage": "5",
+      "iconPath": "Textures/Items/Bow"
     }
   ],
   "armors": [
@@ -18,13 +20,15 @@
       "id": "100",
       "name": "가죽 갑옷",
       "armorType": "Armor",
-      "defence": "10"
+      "defence": "10",
+      "iconPath": "Textures/Items/Leather Armor"
     },
     {
       "id": "101",
       "name": "가죽 투구",
       "armorType": "Helmet",
-      "defence": "5"
+      "defence": "5",
+      "iconPath": "Textures/Items/Leather Helmet"
     }
   ],
   "consumables": [
@@ -32,7 +36,8 @@
       "id": "200",
       "name": "체력회복물약",
       "consumableType": "Potion",
-      "maxCount": "10"
+      "maxCount": "10",
+      "iconPath": "Textures/Items/Red Potion"
     }
 
   ]

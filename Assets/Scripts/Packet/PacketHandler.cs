@@ -159,10 +159,20 @@ class PacketHandler
     {
         S_ItemList itemListPacket = packet as S_ItemList;
 
-        foreach (ItemInfo item in itemListPacket.Items)
+        UI_GameScene gameSceneUI = Managers.UI.SceneUI as UI_GameScene;
+        UI_Inventory inventoryUI = gameSceneUI.InventoryUI;
+
+        Managers.Inven.Clear();
+
+        foreach (ItemInfo itemInfo in itemListPacket.Items)
         {
-            Debug.Log($"{item.TemplateId} : {item.Count}");
+            Item item = Item.MakeItem(itemInfo);
+            Managers.Inven.Add(item);
         }
+
+        //UI에서 표시
+        inventoryUI.gameObject.SetActive(true);
+        inventoryUI.RefreshUI();
 
     }
 

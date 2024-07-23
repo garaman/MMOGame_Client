@@ -11,9 +11,11 @@ public class Managers : MonoBehaviour
     MapManager _map = new MapManager();
     ObjectManager _object = new ObjectManager();
     NetworkManager _network = new NetworkManager();
+    InventoryManager _inven = new InventoryManager();
     public static MapManager Map { get { return Instance._map; } }
     public static ObjectManager Object { get { return Instance._object; } }
     public static NetworkManager Network { get { return Instance._network; } }
+    public static InventoryManager Inven { get { return Instance._inven; } }
     #endregion
 
     #region Core

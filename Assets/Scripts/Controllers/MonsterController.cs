@@ -6,9 +6,9 @@ using static Define;
 
 public class MonsterController : CreatureController
 {    
-    Coroutine _coSkill;
+    //Coroutine _coSkill;
        
-    bool _rangedSkill = false;
+    //bool _rangedSkill = false;
 
     protected override void Init()
     {
