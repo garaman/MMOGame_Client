@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Data
 { 
-#region Skill
+    #region Skill
     [Serializable]
     public class Skill
     {
@@ -101,4 +101,33 @@ namespace Data
     }
     #endregion
 
+    #region Monster
+
+    [Serializable]
+    public class MonsterData
+    {
+        public int id;
+        public string name;
+        public StatInfo stat;
+        public string prefabPath;
+    }
+
+    [Serializable]
+    public class MonsterLoader : ILoader<int, MonsterData>
+    {
+        public List<MonsterData> monsters = new List<MonsterData>();
+
+        public Dictionary<int, MonsterData> MakeDict()
+        {
+            Dictionary<int, MonsterData> dict = new Dictionary<int, MonsterData>();
+            foreach (MonsterData monster in monsters)
+            {
+                dict.Add(monster.id, monster);
+            }
+
+            return dict;
+        }
+    }
+
+    #endregion
 }

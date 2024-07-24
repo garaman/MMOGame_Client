@@ -159,9 +159,6 @@ class PacketHandler
     {
         S_ItemList itemListPacket = packet as S_ItemList;
 
-        UI_GameScene gameSceneUI = Managers.UI.SceneUI as UI_GameScene;
-        UI_Inventory inventoryUI = gameSceneUI.InventoryUI;
-
         Managers.Inven.Clear();
 
         foreach (ItemInfo itemInfo in itemListPacket.Items)
@@ -170,9 +167,35 @@ class PacketHandler
             Managers.Inven.Add(item);
         }
 
-        //UI에서 표시
-        inventoryUI.gameObject.SetActive(true);
-        inventoryUI.RefreshUI();
+
+    }
+
+    public static void S_AddItemHandler(PacketSession session, IMessage packet)
+    {
+        S_AddItem itemListPacket = packet as S_AddItem;
+
+        UI_GameScene gameSceneUI = Managers.UI.SceneUI as UI_GameScene;
+        UI_Inventory inventoryUI = gameSceneUI.InventoryUI;
+        
+        foreach (ItemInfo itemInfo in itemListPacket.Items)
+        {
+            Item item = Item.MakeItem(itemInfo);
+            Managers.Inven.Add(item);
+        }
+
+        Debug.Log("아이템을 획득했습니다.");
+
+    }
+
+    public static void S_EquipItemHandler(PacketSession session, IMessage packet)
+    {
+        S_EquipItem equipItemPacket = packet as S_EquipItem;
+
+    }
+
+    public static void S_ChangeStatHandler(PacketSession session, IMessage packet)
+    {
+        S_ChangeStat changeStatPacket = packet as S_ChangeStat;
 
     }
 

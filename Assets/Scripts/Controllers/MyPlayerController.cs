@@ -20,6 +20,8 @@ public class MyPlayerController : PlayerController
 
     protected override void UpdateController()
     {
+        GetUIKeyInput();
+
         switch (State)
         {
             case CreatureState.Idle:
@@ -58,6 +60,24 @@ public class MyPlayerController : PlayerController
         _coSkillCoolTime = null;
     }
 
+    void GetUIKeyInput()
+    {
+        if (Input.GetKeyDown(KeyCode.I))
+        {
+            UI_GameScene gameSceneUI = Managers.UI.SceneUI as UI_GameScene;
+            UI_Inventory inventoryUI = gameSceneUI.InventoryUI;
+
+            if (inventoryUI.gameObject.activeSelf)
+            {
+                inventoryUI.gameObject.SetActive(false);
+            }
+            else
+            {
+                inventoryUI.gameObject.SetActive(true);
+            }
+            inventoryUI.RefreshUI();
+        }
+    }
     void GetDirInput()
     {
         _moveKeyPressed = true;
