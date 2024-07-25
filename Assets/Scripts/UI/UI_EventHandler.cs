@@ -4,15 +4,34 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class UI_EventHandler : MonoBehaviour, IPointerClickHandler, IDragHandler
+public class UI_EventHandler : MonoBehaviour, IPointerClickHandler, IDragHandler 
 {
     public Action<PointerEventData> OnClickHandler = null;
+    public Action<PointerEventData> OnDoubleClickHandler = null;
     public Action<PointerEventData> OnDragHandler = null;
 
-	public void OnPointerClick(PointerEventData eventData)
+    private const float doubleClickTime = 0.3f;
+    private float lastClickTime = 0f;
+    private bool isSingleClick = false;
+
+    public void OnPointerClick(PointerEventData eventData)
 	{
-		if (OnClickHandler != null)
-			OnClickHandler.Invoke(eventData);
+        float timeSinceLastClick = Time.time - lastClickTime;
+
+        if (timeSinceLastClick <= doubleClickTime)
+        {
+            isSingleClick = false;
+            if (OnDoubleClickHandler != null)
+                OnDoubleClickHandler.Invoke(eventData);
+        }
+        else
+        {
+            isSingleClick = true;
+            if (OnClickHandler != null)
+                OnClickHandler.Invoke(eventData);
+        }
+
+        lastClickTime = Time.time;
 	}
 
 	public void OnDrag(PointerEventData eventData)

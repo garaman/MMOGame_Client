@@ -1,4 +1,5 @@
 using Google.Protobuf.Protocol;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,16 +7,18 @@ using static Define;
 
 public class MyPlayerController : PlayerController
 {
-    bool _moveKeyPressed = false;
+    bool _moveKeyPressed = false;    
+    public int WeaponDamage {  get; private set; }
+    public int ArmorDefence {  get; private set; }
     protected override void Init()
     {
-        base.Init();
+        base.Init();        
+        RefreshAddionalStat();
     }
 
     private void LateUpdate()
     {
         Camera.main.transform.position = new Vector3(transform.position.x, transform.position.y, -10);
-
     }
 
     protected override void UpdateController()
@@ -76,6 +79,21 @@ public class MyPlayerController : PlayerController
                 inventoryUI.gameObject.SetActive(true);
             }
             inventoryUI.RefreshUI();
+        }
+        else if(Input.GetKeyDown(KeyCode.P))
+        {
+            UI_GameScene gameSceneUI = Managers.UI.SceneUI as UI_GameScene;            
+            UI_Stat statUI = gameSceneUI.StatUI;
+
+            if (statUI.gameObject.activeSelf)
+            {
+                statUI.gameObject.SetActive(false);
+            }
+            else
+            {
+                statUI.gameObject.SetActive(true);
+            }
+            statUI.RefreshUI();
         }
     }
     void GetDirInput()
@@ -149,6 +167,27 @@ public class MyPlayerController : PlayerController
             C_Move movePacket = new C_Move();
             movePacket.PosInfo = PosInfo;
             Managers.Network.Send(movePacket);
+        }
+    }
+
+    public void RefreshAddionalStat()
+    {
+        WeaponDamage = 0;
+        ArmorDefence = 0;
+
+        foreach (Item item in Managers.Inven.Items.Values)
+        {
+            if (item.Equipped == false) { continue; }
+
+            switch (item.ItemType)
+            {
+                case ItemType.Weapon:
+                    WeaponDamage += ((Weapon)item).Damage;
+                    break;
+                case ItemType.Armor:
+                    ArmorDefence += ((Armor)item).Defence;
+                    break;
+            }
         }
     }
 }

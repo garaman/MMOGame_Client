@@ -55,7 +55,7 @@ namespace Data
     public class WeaponData : ItemData
     {
         public WeaponType weaponType;
-        public int daamage;
+        public int damage;
     }
     [Serializable]
     public class ArmorData : ItemData
