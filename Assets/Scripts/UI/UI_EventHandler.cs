@@ -13,11 +13,10 @@ public class UI_EventHandler : MonoBehaviour, IPointerClickHandler, IDragHandler
     private const float doubleClickTime = 0.3f;
     private float lastClickTime = 0f;
     private bool isSingleClick = false;
-
     public void OnPointerClick(PointerEventData eventData)
 	{
         float timeSinceLastClick = Time.time - lastClickTime;
-
+        
         if (timeSinceLastClick <= doubleClickTime)
         {
             isSingleClick = false;
@@ -30,7 +29,7 @@ public class UI_EventHandler : MonoBehaviour, IPointerClickHandler, IDragHandler
             if (OnClickHandler != null)
                 OnClickHandler.Invoke(eventData);
         }
-
+        if (isSingleClick == false) { isSingleClick = false; }
         lastClickTime = Time.time;
 	}
 

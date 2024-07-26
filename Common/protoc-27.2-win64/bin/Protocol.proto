@@ -27,6 +27,8 @@ enum MsgId
   C_EQUIP_ITEM = 18;
   S_EQUIP_ITEM = 19;
   S_CHANGE_STAT = 20;
+  S_PING = 21;
+  C_PONG = 22;
 }
 
 enum CreatureState
@@ -101,10 +103,7 @@ message S_EnterGame
   ObjectInfo player = 1;
 }
 
-message S_LeaveGame
-{
-
-}
+message S_LeaveGame { }
 
 message S_Spawn
 {
@@ -150,10 +149,7 @@ message S_Die
 	int32 attackerId = 2;
 }
 
-message S_Connected
-{
-
-}
+message S_Connected { }
 
 message C_Login
 {
@@ -206,6 +202,12 @@ message S_AddItem
  {
 	 StatInfo statInfo = 1;
  }
+
+ message S_Ping { }
+
+ message C_Pong { }
+
+
 
 
 message LobbyPlayerInfo
