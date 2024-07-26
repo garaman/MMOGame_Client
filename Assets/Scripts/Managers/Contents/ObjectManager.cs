@@ -17,6 +17,9 @@ public class ObjectManager
 
     public void Add(ObjectInfo info, bool myPlayer = false)
     {
+        if(MyPlayer != null && MyPlayer.Id == info.ObjectId) { return; }
+        if(_objects.ContainsKey(info.ObjectId)) { return; }
+
         GameObjectType objectType = GetObjectTypeById(info.ObjectId);
 
         if(objectType == GameObjectType.Player)
@@ -78,6 +81,9 @@ public class ObjectManager
 
     public void Remove(int id)
     {
+        if (MyPlayer != null && MyPlayer.Id == id) { return; }
+        if (_objects.ContainsKey(id) == false) { return; }
+
         GameObject go = FindbyId(id);
         if (go == null) { return; }
         _objects.Remove(id);
