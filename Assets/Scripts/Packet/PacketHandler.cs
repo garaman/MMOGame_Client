@@ -110,9 +110,7 @@ class PacketHandler
         //Debug.Log(SystemInfo.deviceUniqueIdentifier);
         string path = Application.dataPath;
         loginPacket.UniqueId = path.GetHashCode().ToString();
-        Managers.Network.Send(loginPacket);
-       
-
+        Managers.Network.Send(loginPacket);   
     }
 
     public static void S_LoginHandler(PacketSession session, IMessage packet)

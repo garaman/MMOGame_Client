@@ -11,6 +11,9 @@ public class GameScene : BaseScene
 
         SceneType = Define.Scene.Game;
 
+        // TODO : 임시로 테스트        
+        WebPacket.SendCreateAccount("Garam", "1234");
+
         Managers.Map.LoadMap(1);
 
         Screen.SetResolution(640, 480, false); 
