@@ -18,48 +18,19 @@ public class LoginAccountPacketReq
     public string AccountName;
     public string Password;
 }
-
 public class ServerInfo
 {
     public string Name;
-    public string Ip;
-    public int CrowdeLevel;
+    public string IpAddress;
+    public int Port;
+    public int BusyScore;
 }
 
 public class LoginAccountPacketRes
 {
     public bool LoginOk;
-    public List<ServerInfo> ServerList;
-}
-
-public class WebPacket
-{ 
-    public static void SendCreateAccount(string account, string password)
-    {
-        CreateAccountPacketReq packet = new CreateAccountPacketReq()
-        { 
-            AccountName = account,
-            Password = password
-        };
-
-        Managers.Web.SendPostRequest<CreateAccountPacketRes>("account/create", packet, (res) =>
-        {
-            Debug.Log("CreateOk");
-        });
-    }
-
-    public static void SendLoginAccount(string account, string password)
-    {
-        LoginAccountPacketReq packet = new LoginAccountPacketReq()
-        {
-            AccountName = account,
-            Password = password
-        };
-
-        Managers.Web.SendPostRequest<LoginAccountPacketRes>("account/login", packet, (res) =>
-        {
-            Debug.Log("LoginOk");
-        });
-    }
+    public int AccountId;
+    public int Token;
+    public List<ServerInfo> ServerList = new List<ServerInfo>();
 }
 

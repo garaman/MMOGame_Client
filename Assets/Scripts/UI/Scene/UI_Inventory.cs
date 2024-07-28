@@ -20,7 +20,7 @@ public class UI_Inventory : UI_Base
         for(int i = 0; i < _slotMaxCount; i++)
         {
             GameObject go = Managers.Resource.Instantiate("UI/Scene/UI_Inventory_Item",grid.transform);
-            UI_Inventory_Item item = go.GetComponent<UI_Inventory_Item>();
+            UI_Inventory_Item item = go.GetOrAddComponent<UI_Inventory_Item>();
             Items.Add( item );
         }
 
