@@ -1,0 +1,10 @@
+{
+  "npcs": [
+    {
+      "id": "1",
+      "name": "상인",
+      "npcType": "Shop",
+      "prefab": "Creature/Npc"
+    }    
+  ]
+} 

@@ -80,9 +80,9 @@ public class MyPlayerController : PlayerController
             }
             inventoryUI.RefreshUI();
         }
-        else if(Input.GetKeyDown(KeyCode.P))
+        else if (Input.GetKeyDown(KeyCode.P))
         {
-            UI_GameScene gameSceneUI = Managers.UI.SceneUI as UI_GameScene;            
+            UI_GameScene gameSceneUI = Managers.UI.SceneUI as UI_GameScene;
             UI_Stat statUI = gameSceneUI.StatUI;
 
             if (statUI.gameObject.activeSelf)
@@ -94,6 +94,14 @@ public class MyPlayerController : PlayerController
                 statUI.gameObject.SetActive(true);
             }
             statUI.RefreshUI();
+        }
+        else if (Input.GetKeyDown(KeyCode.Q))
+        {
+            C_ChangeRoom changePacket = new C_ChangeRoom();
+
+            changePacket.RoomId = 2;
+
+            Managers.Network.Send(changePacket);
         }
     }
     void GetDirInput()

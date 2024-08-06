@@ -29,6 +29,9 @@ enum MsgId
   S_CHANGE_STAT = 20;
   S_PING = 21;
   C_PONG = 22;
+  S_CHANGE_ROOM = 23;
+  C_CHANGE_ROOM = 24;
+  S_INTERACT = 25;  
 }
 
 enum CreatureState
@@ -53,6 +56,7 @@ enum GameObjectType
 	PLAYER = 1;
 	MONSTER = 2;
 	PROJECTILE = 3;
+	NPC = 4;
 }
 
 enum SkillType
@@ -96,6 +100,13 @@ enum ConsumableType
 {
 	CONSUMABLE_TYPE_NONE = 0;
 	CONSUMABLE_TYPE_POTION = 1;	
+}
+
+enum NpcType
+{
+	NPC_TYPE_NONE = 0;
+	NPC_TYPE_SHOP = 1;
+	NPC_TYPE_ZONE = 2;
 }
 
 message S_EnterGame 
@@ -207,6 +218,23 @@ message S_AddItem
 
  message C_Pong { }
 
+ message C_ChangeRoom
+ {
+	int32 roomId = 1;
+ }
+
+  message S_ChangeRoom
+ {
+	int32 roomId = 1;
+	bool changeState = 2;
+ }
+
+ message S_Interact
+ {
+	 int32 npcId = 1;
+	 ObjectInfo player = 2;
+	 bool active = 3;
+ }
 
 
 
@@ -223,6 +251,7 @@ message ObjectInfo
 	string name = 2;
 	PositionInfo posInfo = 3;
 	StatInfo statInfo = 4;
+	int32 templateId = 5;
 }
 
 message PositionInfo

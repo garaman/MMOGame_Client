@@ -3,9 +3,10 @@
     {
       "id": "1",
       "name": "도플갱어",
+      "prefab": "Creature/Monster",
       "stat": {
         "level": "1",
-        "maxHp": "20",
+        "maxHp": "200",
         "attack": "5",
         "speed": "5.0",
         "totalExp": "10"

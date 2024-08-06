@@ -108,8 +108,8 @@ namespace Data
     {
         public int id;
         public string name;
-        public StatInfo stat;
-        public string prefabPath;
+        public string prefab;
+        public StatInfo stat;        
     }
 
     [Serializable]
@@ -123,6 +123,36 @@ namespace Data
             foreach (MonsterData monster in monsters)
             {
                 dict.Add(monster.id, monster);
+            }
+
+            return dict;
+        }
+    }
+
+    #endregion
+
+    #region Npc
+
+    [Serializable]
+    public class NpcData
+    {
+        public int id;
+        public string name;
+        public NpcType npcType;
+        public string prefab;
+    }
+
+    [Serializable]
+    public class NpcLoader : ILoader<int, NpcData>
+    {
+        public List<NpcData> npcs = new List<NpcData>();
+
+        public Dictionary<int, NpcData> MakeDict()
+        {
+            Dictionary<int, NpcData> dict = new Dictionary<int, NpcData>();
+            foreach (NpcData npc in npcs)
+            {
+                dict.Add(npc.id, npc);
             }
 
             return dict;

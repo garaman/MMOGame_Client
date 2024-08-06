@@ -26,9 +26,9 @@ class PacketHandler
     {
         S_Spawn spawnPacket = packet as S_Spawn;
 
-        foreach (ObjectInfo player in spawnPacket.Objects)
+        foreach (ObjectInfo obj in spawnPacket.Objects)
         {
-            Managers.Object.Add(player, myPlayer: false);
+            Managers.Object.Add(obj, myPlayer: false);
         }
     }
 
@@ -229,4 +229,35 @@ class PacketHandler
         Managers.Network.Send(pongPacket);
     }
 
+    public static void S_ChangeRoomHandler(PacketSession session, IMessage packet)
+    {
+        S_ChangeRoom changePacket = packet as S_ChangeRoom;
+
+        if (changePacket.ChangeState == false) { return; }
+
+        Managers.Map.LoadMap(changePacket.RoomId);
+    }
+
+    public static void S_InteractHandler(PacketSession session, IMessage packet)
+    {
+        S_Interact interPacket = packet as S_Interact;        
+        GameObject go = Managers.Object.FindbyId(interPacket.NpcId);
+        if (go == null) { return; }
+        NpcController nc = go.GetComponent<NpcController>();
+        if (nc == null) { return; }
+
+        bool check = interPacket.Active;
+
+        if(check) 
+        {
+            Debug.Log("Npc 주변에 Player가 있습니다.");          
+             nc.ActiveInteract();           
+        }
+        else
+        {
+            nc.DisActiveInteract();
+        }
+
+
+    }
 }

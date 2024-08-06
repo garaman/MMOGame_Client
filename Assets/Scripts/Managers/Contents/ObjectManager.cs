@@ -1,3 +1,4 @@
+using Data;
 using Google.Protobuf.Protocol;
 using System;
 using System.Collections;
@@ -51,8 +52,10 @@ public class ObjectManager
         }
         else if(objectType == GameObjectType.Monster)
         {
-            GameObject go = Managers.Resource.Instantiate("Creature/Monster");
-            go.name = info.Name;
+            MonsterData monsterData = null;
+            Managers.Data.MonsterDict.TryGetValue(info.TemplateId, out monsterData);
+            GameObject go = Managers.Resource.Instantiate(monsterData.prefab);
+            go.name = monsterData.name;
             _objects.Add(info.ObjectId, go);
 
             MonsterController mc = go.GetComponent<MonsterController>();
@@ -63,14 +66,28 @@ public class ObjectManager
         }
         else if(objectType == GameObjectType.Projectile)
         {
-            GameObject go = Managers.Resource.Instantiate("Skill/Arrow");
-            go.name = "Arrow";
-            _objects.Add(info.ObjectId, go);
+            Skill skillData = null;
+            Managers.Data.SkillDict.TryGetValue(info.TemplateId, out skillData);
+            GameObject go = Managers.Resource.Instantiate(skillData.projectileInfo.prefab);
+            go.name =skillData.name;
+            _objects.Add(info.ObjectId, go);            
 
             ArrowController ac = go.GetComponent<ArrowController>();
             ac.PosInfo = info.PosInfo;
             ac.Stat = info.StatInfo;
             ac.SyncPos(info.PosInfo.MoveDir);
+        }
+        else if (objectType == GameObjectType.Npc)
+        {            
+            NpcData npcData = null;
+            Managers.Data.NpcDict.TryGetValue(info.TemplateId, out npcData);
+            GameObject go = Managers.Resource.Instantiate(npcData.prefab);
+            go.name = info.Name;
+            _objects.Add(info.ObjectId, go);
+
+            NpcController nc = go.GetComponent<NpcController>();
+            nc.PosInfo = info.PosInfo;            
+            nc.SyncPos(info.PosInfo.MoveDir);
         }
     }
 
