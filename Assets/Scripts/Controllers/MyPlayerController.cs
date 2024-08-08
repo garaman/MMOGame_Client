@@ -2,6 +2,7 @@ using Google.Protobuf.Protocol;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using static Define;
 
@@ -10,9 +11,15 @@ public class MyPlayerController : PlayerController
     bool _moveKeyPressed = false;    
     public int WeaponDamage {  get; private set; }
     public int ArmorDefence {  get; private set; }
+    
+    public NpcController TargetNpc { get; set; }
+
+    UI_GameScene gameSceneUI;
+
     protected override void Init()
     {
         base.Init();        
+        gameSceneUI = Managers.UI.SceneUI as UI_GameScene;
         RefreshAddionalStat();
     }
 
@@ -67,7 +74,6 @@ public class MyPlayerController : PlayerController
     {
         if (Input.GetKeyDown(KeyCode.I))
         {
-            UI_GameScene gameSceneUI = Managers.UI.SceneUI as UI_GameScene;
             UI_Inventory inventoryUI = gameSceneUI.InventoryUI;
 
             if (inventoryUI.gameObject.activeSelf)
@@ -81,8 +87,7 @@ public class MyPlayerController : PlayerController
             inventoryUI.RefreshUI();
         }
         else if (Input.GetKeyDown(KeyCode.P))
-        {
-            UI_GameScene gameSceneUI = Managers.UI.SceneUI as UI_GameScene;
+        {            
             UI_Stat statUI = gameSceneUI.StatUI;
 
             if (statUI.gameObject.activeSelf)
@@ -102,6 +107,21 @@ public class MyPlayerController : PlayerController
             changePacket.RoomId = 2;
 
             Managers.Network.Send(changePacket);
+        }
+        else if(Input.GetKeyDown(KeyCode.G))
+        {
+            if(TargetNpc == null) { return; }            
+            UI_Shop ShopUI = gameSceneUI.ShopUI;
+
+            if (ShopUI.gameObject.activeSelf)
+            {
+                ShopUI.gameObject.SetActive(false);
+            }
+            else
+            {
+                ShopUI.gameObject.SetActive(true);
+            }
+            ShopUI.RefreshUI();
         }
     }
     void GetDirInput()
@@ -197,5 +217,18 @@ public class MyPlayerController : PlayerController
                     break;
             }
         }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.CompareTag("Npc"))
+        {
+            TargetNpc = collision.gameObject.GetComponent<NpcController>();
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (TargetNpc != null) { TargetNpc = null; }
     }
 }

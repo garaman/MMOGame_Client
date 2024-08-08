@@ -30,4 +30,22 @@ public class NpcController : BaseController
         sprite.enabled = false;
         Active = false;
     }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.CompareTag("Player"))
+        {            
+            MyPlayerController mpc = collision.GetComponent<MyPlayerController>();
+            if (mpc != null)
+            {
+                ActiveInteract();
+            }
+        }
+        
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        DisActiveInteract();
+    }
 }

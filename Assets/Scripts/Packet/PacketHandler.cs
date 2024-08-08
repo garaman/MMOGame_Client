@@ -245,7 +245,7 @@ class PacketHandler
         if (go == null) { return; }
         NpcController nc = go.GetComponent<NpcController>();
         if (nc == null) { return; }
-
+        /*
         bool check = interPacket.Active;
 
         if(check) 
@@ -257,7 +257,34 @@ class PacketHandler
         {
             nc.DisActiveInteract();
         }
+        */
+    }
 
+    public static void S_BuyItemHandler(PacketSession session, IMessage packet)
+    {
+        S_BuyItem buyPacket = packet as S_BuyItem;
+
+        if (buyPacket.Success == false) 
+        {
+            Debug.Log("인벤토리가 가득차서 실패.");
+        }
+
+    }
+
+    public static void S_SellItemHandler(PacketSession session, IMessage packet)
+    {
+        S_SellItem sellPacket = packet as S_SellItem;
+        
+        Item item = Managers.Inven.Get(sellPacket.ItemDbId);
+        if (item != null)
+        {
+            Managers.Inven.Remove(sellPacket.ItemDbId);
+            Debug.Log("판매완료.");
+        }
+        
+        UI_GameScene gameSceneUI = Managers.UI.SceneUI as UI_GameScene;        
+        gameSceneUI.ShopUI.RefreshUI();
+        gameSceneUI.InventoryUI.RefreshUI();
 
     }
 }

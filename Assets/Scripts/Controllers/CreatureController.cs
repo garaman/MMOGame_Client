@@ -46,6 +46,8 @@ public class CreatureController : BaseController
             ratio = ((float)Hp / Stat.MaxHp);            
         }
         _hpbar.SetHpBar(ratio);
+
+        //Debug.Log($"{this.gameObject.name} / {Hp}");
     }
 
     protected override void Init()

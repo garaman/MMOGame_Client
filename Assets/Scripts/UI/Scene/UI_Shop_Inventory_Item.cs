@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UI_Inventory_Item : UI_Base
+public class UI_Shop_Inventory_Item : UI_Base
 {
     [SerializeField]
     Image _icon;
@@ -20,17 +20,13 @@ public class UI_Inventory_Item : UI_Base
     {
         _icon.gameObject.BindEvent((e) =>
         {
-            Data.ItemData itemData = null;
-            Managers.Data.ItemDict.TryGetValue(TemplateId, out itemData);
-            if (itemData == null) { return; }
-            if (itemData.itemType == ItemType.Consumable) { return; }
+            if (Equipped == true) { Debug.Log("착용중인 장비는 판매가 불가합니다."); return; }
 
-            C_EquipItem equipPacket = new C_EquipItem();
-            equipPacket.ItemDbId = ItemDbId;
-            equipPacket.Equipped = !Equipped;
+            C_SellItem sellPacket = new C_SellItem();
+            sellPacket.ItemDbId = ItemDbId;            
 
-            Managers.Network.Send(equipPacket);
-        }, Define.UIEvent.Click);
+            Managers.Network.Send(sellPacket);
+        }, Define.UIEvent.DoubleClick);
     }
 
     public void SetItem(Item item)

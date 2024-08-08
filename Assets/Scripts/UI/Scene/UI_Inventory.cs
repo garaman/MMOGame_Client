@@ -32,6 +32,11 @@ public class UI_Inventory : UI_Base
     {
         if (Items.Count == 0) { return; }
 
+        for (int i = 0; i < _slotMaxCount; i++)
+        {
+            Items[i].SetItem(null);
+        }
+
         List<Item> items = Managers.Inven.Items.Values.ToList();
         items.Sort((left, right) => { return left.Slot - right.Slot; });
 

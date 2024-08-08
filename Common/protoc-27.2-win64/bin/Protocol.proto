@@ -31,7 +31,11 @@ enum MsgId
   C_PONG = 22;
   S_CHANGE_ROOM = 23;
   C_CHANGE_ROOM = 24;
-  S_INTERACT = 25;  
+  S_INTERACT = 25; 
+  C_BUY_ITEM = 26;
+  S_BUY_ITEM = 27;
+  C_SELL_ITEM = 28;
+  S_SELL_ITEM = 29;
 }
 
 enum CreatureState
@@ -214,6 +218,25 @@ message S_AddItem
 	 StatInfo statInfo = 1;
  }
 
+ message C_BuyItem
+{
+	int32 templateId = 1;
+}
+ message S_BuyItem
+{
+	int32 templateId = 1;
+	bool success = 2;
+}
+ message C_SellItem
+{
+	int32 itemDbId = 1;
+}
+ message S_SellItem
+{
+	int32 itemDbId = 1;
+	bool success = 2;
+}
+
  message S_Ping { }
 
  message C_Pong { }
@@ -270,6 +293,7 @@ message StatInfo
 	int32 attack = 4;
 	float speed = 5;
 	int32 totalExp = 6;
+	int32 gold = 7;
 }
 
 message SkillInfo

@@ -11,6 +11,10 @@ public class InventoryManager : MonoBehaviour
     {
         Items.Add(item.ItemDbId, item);
     }
+    public void Remove(int ItemDbId)
+    {
+        Items.Remove(ItemDbId);
+    }
 
     public Item Get(int itemDbId)
     {
