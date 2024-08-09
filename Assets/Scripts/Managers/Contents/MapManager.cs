@@ -64,10 +64,12 @@ public class MapManager
         go.name = "Map";
 
         GameObject collision = Util.FindChild(go, "Tilemap_Collision", true);
+        /*
         if (collision != null)
         {
-            collision.SetActive(false);
+            collision.SetActive(true);
         }
+        */
 
         CurrentGrid = go.GetComponent<Grid>();
 
