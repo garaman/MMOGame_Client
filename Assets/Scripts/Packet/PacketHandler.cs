@@ -236,6 +236,7 @@ class PacketHandler
         if (changePacket.ChangeState == false) { return; }
 
         Managers.Map.LoadMap(changePacket.RoomId);
+        Managers.Sound.Play("Bgm/Battle", Define.Sound.Bgm);
     }
 
     public static void S_InteractHandler(PacketSession session, IMessage packet)
@@ -269,6 +270,9 @@ class PacketHandler
             Debug.Log("인벤토리가 가득차서 실패.");
         }
 
+        UI_GameScene gameSceneUI = Managers.UI.SceneUI as UI_GameScene;
+        gameSceneUI.ShopUI.RefreshUI();
+        gameSceneUI.InventoryUI.RefreshUI();
     }
 
     public static void S_SellItemHandler(PacketSession session, IMessage packet)

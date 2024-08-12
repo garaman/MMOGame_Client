@@ -105,10 +105,12 @@ public class PlayerController : CreatureController
         if (skillId == 1)
         {
             _coSkill = StartCoroutine("CoStartPunch");
+            Managers.Sound.Play("Effect/Melee", Define.Sound.Effect);
         }
         else if (skillId == 2) 
         {
             _coSkill = StartCoroutine("CoStartShootArrow");
+            Managers.Sound.Play("Effect/bow", Define.Sound.Effect);
         }
     }
 

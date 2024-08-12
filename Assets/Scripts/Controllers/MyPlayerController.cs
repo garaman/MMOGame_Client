@@ -2,7 +2,6 @@ using Google.Protobuf.Protocol;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using static Define;
 
@@ -13,6 +12,7 @@ public class MyPlayerController : PlayerController
     public int ArmorDefence {  get; private set; }
     
     public NpcController TargetNpc { get; set; }
+    public Portal TargetPortal { get; set; }
 
     UI_GameScene gameSceneUI;
 
@@ -83,6 +83,7 @@ public class MyPlayerController : PlayerController
             else
             {
                 inventoryUI.gameObject.SetActive(true);
+                Managers.Sound.Play("Effect/Pop", Define.Sound.Effect);
             }
             inventoryUI.RefreshUI();
         }
@@ -97,31 +98,25 @@ public class MyPlayerController : PlayerController
             else
             {
                 statUI.gameObject.SetActive(true);
+                Managers.Sound.Play("Effect/Pop", Define.Sound.Effect);
             }
             statUI.RefreshUI();
         }
         else if (Input.GetKeyDown(KeyCode.Q))
         {
-            C_ChangeRoom changePacket = new C_ChangeRoom();
-
-            changePacket.RoomId = 2;
-
-            Managers.Network.Send(changePacket);
+            
         }
         else if(Input.GetKeyDown(KeyCode.G))
         {
-            if(TargetNpc == null) { return; }            
-            UI_Shop ShopUI = gameSceneUI.ShopUI;
-
-            if (ShopUI.gameObject.activeSelf)
+            if (TargetNpc != null)
             {
-                ShopUI.gameObject.SetActive(false);
+                TargetNpc.ActiveNpc();
             }
-            else
+            else if (TargetPortal != null)
             {
-                ShopUI.gameObject.SetActive(true);
+                TargetPortal.ActivePortal();
             }
-            ShopUI.RefreshUI();
+            
         }
     }
     void GetDirInput()
@@ -218,17 +213,5 @@ public class MyPlayerController : PlayerController
             }
         }
     }
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if(collision.CompareTag("Npc"))
-        {
-            TargetNpc = collision.gameObject.GetComponent<NpcController>();
-        }
-    }
-
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        if (TargetNpc != null) { TargetNpc = null; }
-    }
+    
 }

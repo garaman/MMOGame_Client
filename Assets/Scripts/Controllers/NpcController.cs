@@ -8,7 +8,7 @@ public class NpcController : BaseController
     SpriteRenderer sprite;
 
     public bool Active { get; private set; }
-    public GameObject target;
+
     protected override void Init()
     {
         base.Init();
@@ -20,15 +20,31 @@ public class NpcController : BaseController
         
     }
 
-    public void ActiveInteract()
+    void ActiveInteract()
     {
         sprite.enabled = true;
         Active = true;
     }
-    public void DisActiveInteract()
+    void DisActiveInteract()
     {
         sprite.enabled = false;
         Active = false;
+    }
+
+    public void ActiveNpc()
+    {
+        UI_GameScene gameSceneUI = Managers.UI.SceneUI as UI_GameScene;
+        UI_Shop ShopUI = gameSceneUI.ShopUI;
+
+        if (ShopUI.gameObject.activeSelf)
+        {
+            ShopUI.gameObject.SetActive(false);
+        }
+        else
+        {
+            ShopUI.gameObject.SetActive(true);
+        }
+        ShopUI.RefreshUI();
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -39,13 +55,22 @@ public class NpcController : BaseController
             if (mpc != null)
             {
                 ActiveInteract();
+                mpc.TargetNpc = this;
             }
-        }
-        
+        }        
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        DisActiveInteract();
+        if(collision.CompareTag("Player"))
+        {
+            MyPlayerController mpc = collision.GetComponent<MyPlayerController>();
+            if (mpc != null)
+            {
+                DisActiveInteract();
+                mpc.TargetNpc = null;
+            }
+        }
+        
     }
 }

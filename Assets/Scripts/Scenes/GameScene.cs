@@ -16,6 +16,7 @@ public class GameScene : BaseScene
         Screen.SetResolution(640, 480, false); 
                 
         _sceneUI = Managers.UI.ShowSceneUI<UI_GameScene>();
+        Managers.Sound.Play("Bgm/Main", Define.Sound.Bgm);
     }
 
     public override void Clear()

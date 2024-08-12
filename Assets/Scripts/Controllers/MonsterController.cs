@@ -32,6 +32,7 @@ public class MonsterController : CreatureController
         if (skillId == 1)
         {
             State = CreatureState.Skill;
+            Managers.Sound.Play("Effect/Melee", Define.Sound.Effect);
         }
         
     }
